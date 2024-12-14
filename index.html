@@ -1,1 +1,546 @@
-Sup Geeks!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Night Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky-color: #0a1117;
+            --star-color: #d3d7de;
+            --grass-color: #0a0f0a;
+            --text-color: #e6e9ed;
+            --accent-color: #937264;
+            --moon-color: #d3d7de;
+            --firefly-color: #ffd700;
+            --cloud-color: rgba(44, 49, 59, 0.7);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(180deg, var(--sky-color) 0%, #131c24 40%, #1a2530 100%);
+        }
+        .landscape {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 45vh;
+            background: linear-gradient(160deg, var(--grass-color) 0%, #050705 100%);
+            clip-path: polygon(0 50%, 15% 45%, 35% 42%, 65% 40%, 85% 42%, 100% 45%, 100% 100%, 0% 100%);
+            z-index: 1;
+        }
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: var(--star-color);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: twinkle 3s ease-in-out infinite alternate;
+        }
+        .moon {
+            position: fixed;
+            top: 5%;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+            background: var(--moon-color);
+            border-radius: 50%;
+            box-shadow: 0 0 60px rgba(211, 215, 222, 0.3);
+            opacity: 0.9;
+        }
+        .cloud {
+            position: fixed;
+            background: var(--cloud-color);
+            border-radius: 100px;
+            filter: blur(5px);
+        }
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            filter: blur(5px);
+        }
+        .cloud::before {
+            width: 50%;
+            height: 80%;
+            top: -40%;
+            left: 20%;
+            border-radius: 50%;
+        }
+        .cloud::after {
+            width: 60%;
+            height: 100%;
+            top: -30%;
+            right: 20%;
+            border-radius: 50%;
+        }
+        .shooting-star {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            opacity: 0;
+            filter: blur(1px);
+            box-shadow: 0 0 3px #fff;
+            transform-origin: center;
+        }
+        
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;  /* Changed from left to right */
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(to right,  /* Changed gradient direction to right */
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                rgba(255, 255, 255, 0.8)
+            );
+            transform: translateY(-50%);  /* Removed translateX */
+            filter: blur(1px);
+        }
+        .sky-firefly {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--firefly-color);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--firefly-color);
+            opacity: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+        @keyframes twinkle {
+            from { opacity: 0.3; }
+            to { opacity: 0.7; }
+        }
+        @keyframes moveCloud {
+            from { transform: translateX(-200px); }
+            to { transform: translateX(100vw); }
+        }
+        @keyframes shootingStar {
+            0% { 
+                transform: translate(0, 0) rotate(135deg); 
+                opacity: 1;
+            }
+            100% { 
+                transform: translate(-400px, 400px) rotate(135deg);
+                opacity: 0;
+            }
+        }
+        @keyframes skyFirefly {
+            0% { opacity: 0; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0; }
+        }
+        @keyframes firefly {
+            0% { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+        }
+        @keyframes fireflyAlternate {
+            0% { transform: rotate(0deg) translateX(40px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
+        }
+        @keyframes normalFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes lanternGlow {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(255, 150, 113, 0.3), 
+                            0 0 20px rgba(255, 150, 113, 0.2);
+                opacity: 0.7;
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(255, 150, 113, 0.5), 
+                            0 0 40px rgba(255, 150, 113, 0.4);
+                opacity: 1;
+            }
+        }
+        .firefly {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--firefly-color);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--firefly-color);
+            opacity: 0.7;
+            z-index: 2;
+        }
+        .lantern {
+            position: fixed;
+            bottom: 40px;
+            z-index: 3;
+            animation: normalFloat 3s ease-in-out infinite;
+        }
+        .lantern.small {
+            width: 30px;
+            height: 45px;
+            right: 12%;
+        }
+        .lantern.large {
+            width: 50px;
+            height: 75px;
+            right: 5%;
+            bottom: 35px;
+        }
+        .lantern-body {
+            width: 100%;
+            height: 80%;
+            background: #ff9671;
+            border-radius: 20px;
+            position: relative;
+            animation: lanternGlow 4s ease-in-out infinite;
+        }
+        .lantern-top {
+            width: 60%;
+            height: 10px;
+            background: #2d2d2d;
+            position: absolute;
+            top: -5px;
+            left: 20%;
+            border-radius: 5px;
+        }
+        .lantern-bottom {
+            width: 70%;
+            height: 8px;
+            background: #2d2d2d;
+            position: absolute;
+            bottom: -4px;
+            left: 15%;
+            border-radius: 4px;
+        }
+        .main-content {
+            position: relative;
+            z-index: 3;
+            height: 150vh;
+            padding: 2.5rem;
+            padding-top: 15vh;
+            text-align: center;
+            color: #ece2dbde;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin: 4rem auto;
+            max-width: 1200px;
+            padding: 0 2rem;
+        }
+        .project-item {
+            text-align: center;
+            background: rgba(6, 9, 48, 0);  /* using accent color with transparency */
+            padding: 1rem;
+            /* border-radius: 10px; */
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px rgba(6, 6, 36, 0.048);
+        }
+        .project-link {
+            text-decoration: none;
+            color: var(--text-color);
+            display: block;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .project-item:hover {
+            transform: scale(1.05);
+            background: rgba(14, 19, 36, 0.034);
+            border-color: rgba(9, 7, 36, 0.109);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .project-item h3 {
+            /* color: var(--text-color); */
+            color: #f1c7a1c0;
+        }
+
+        .project-item p {
+            color: #c57b356b;
+        }
+        p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .copyright {
+            position: fixed;
+            bottom: 0.1rem;
+            width: 100%;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            opacity: 0.7;
+            z-index: 4;
+            font-family: 'Cormorant Garamond', serif;
+            padding: 0.5rem;
+        }
+        .social-links {
+            position: fixed;
+            bottom: 3.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2rem;
+            z-index: 4;
+        }
+        .social-links a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        .social-links a:hover {
+            color: var(--accent-color);
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        .about-me {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .about-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #c57b359d;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .moon {
+                width: 80px;
+                height: 80px;
+            }
+            .projects {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0 1rem;
+            }
+            .about-text {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+            .copyright {
+                font-size: 0.8rem;
+                padding: 0.3rem;
+            }
+            .social-links {
+                bottom: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="moon"></div>
+    <div class="landscape"></div>
+    
+    <div class="lantern large">
+        <div class="lantern-top"></div>
+        <div class="lantern-body">
+            <div class="lantern-glow"></div>
+        </div>
+        <div class="lantern-bottom"></div>
+    </div>
+
+    <div class="lantern small">
+        <div class="lantern-top"></div>
+        <div class="lantern-body">
+            <div class="lantern-glow"></div>
+        </div>
+        <div class="lantern-bottom"></div>
+    </div>
+
+    <main class="main-content">
+        <h1>Shanmukha Kota</h1>
+        <div class="subtitle">Traveler • Engineer • Creator</div>
+        <div class="about-me">
+            <p class="about-text">
+                An explorer of code, stories, and the world. Whether I’m building seamless systems, diving into languages, or crafting experiences, I thrive where creativity meets engineering. Welcome to my journey of projects, passions, and possibilities.
+            </p>
+        </div>
+        <div class="projects">
+            <div href="#" class="project-item">
+                <h3>Pathfinder</h3>
+                <p>Mapping serene journeys—where culture, language, and nature come alive.</p>
+            </div>
+            <div href="#" class="project-item">
+                <h3>CodeSmith</h3>
+                <p>Crafting clean, scalable systems with precision, logic, and design.</p>
+            </div>
+            <div href="#" class="project-item">
+                <h3>LinguaLore</h3>
+                <p>Exploring words, stories, and the threads that connect human cultures.</p>
+            </div>
+        </div>
+        <div class="social-links">
+            <a href="https://github.com/Kota-SH"><i class="fab fa-github"></i></a>
+            <a href="https://x.com/KS_Haripriya"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/hpks/"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+    </main>
+    <div class="copyright">
+        © 2024 Shanmukha Kota. All rights reserved. Unauthorized reproduction or distribution of this material is strictly prohibited.
+    </div>
+
+    <script>
+        // Create stars
+        const stars = document.querySelector('.stars');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 2 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            stars.appendChild(star);
+        }
+
+        // Create clouds
+        function createCloud() {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            const size = Math.random() * 100 + 100;
+            const top = Math.random() * 30;
+            cloud.style.width = size + 'px';
+            cloud.style.height = size/3 + 'px';
+            cloud.style.top = top + '%';
+            // Change this line
+            cloud.style.left = '-200px';  // Add this line to start from left
+            const duration = Math.random() * 20 + 40;
+            cloud.style.animation = `moveCloud ${duration}s linear`;
+            
+            document.body.appendChild(cloud);
+            
+            cloud.addEventListener('animationend', () => {
+                cloud.remove();
+            });
+        }
+
+        // Create initial clouds and add new ones periodically
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => createCloud(), i * 6000);
+        }
+        setInterval(createCloud, 30000);
+
+        // Create shooting stars
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 30 + '%';
+            star.style.animation = 'shootingStar 4s linear forwards';
+            document.body.appendChild(star);
+            
+            star.addEventListener('animationend', () => {
+                star.remove();
+            });
+        }
+
+        // Create sky fireflies
+        function createSkyFirefly() {
+            const firefly = document.createElement('div');
+            firefly.className = 'sky-firefly';
+            firefly.style.left = Math.random() * 100 + '%';
+            firefly.style.top = Math.random() * 50 + '%';
+            
+            const speed = Math.random() * 3 + 2;
+            firefly.style.transition = `all ${speed}s ease-in-out`;
+            
+            setTimeout(() => {
+                firefly.style.left = Math.random() * 100 + '%';
+                firefly.style.top = Math.random() * 50 + '%';
+            }, 100);
+            
+            firefly.style.animation = `skyFirefly ${Math.random() * 3 + 2}s ease-in-out`;
+            document.body.appendChild(firefly);
+            
+            firefly.addEventListener('animationend', () => {
+                firefly.remove();
+            });
+        }
+
+        // Periodically create shooting stars and sky fireflies
+        setInterval(createShootingStar, 2000);
+        setInterval(() => {
+            createShootingStar();
+            createShootingStar();
+        }, 4000);
+        setInterval(createSkyFirefly, 500);
+
+        // Create lantern fireflies
+        const lanterns = document.querySelectorAll('.lantern');
+        lanterns.forEach(lantern => {
+            const numberOfFireflies = Math.floor(Math.random() * 5) + 3;
+            for (let i = 0; i < numberOfFireflies; i++) {
+                const firefly = document.createElement('div');
+                firefly.className = 'firefly';
+                
+                const radius = Math.random() * 50 + 30;
+                const animationDuration = Math.random() * 3 + 4;
+                const animationDelay = Math.random() * 2;
+                const direction = Math.random() > 0.5 ? 1 : -1;
+
+                firefly.style.position = 'absolute';
+                firefly.style.top = `${lantern.offsetTop - radius}px`;
+                firefly.style.left = `${lantern.offsetLeft + lantern.offsetWidth / 2}px`;
+                firefly.style.animation = `${direction > 0 ? 'firefly' : 'fireflyAlternate'} ${animationDuration}s linear infinite`;
+                firefly.style.animationDelay = `-${animationDelay}s`;
+                firefly.style.opacity = Math.random() * 0.5 + 0.5;
+                firefly.style.width = `${Math.random() * 2 + 2}px`;
+                firefly.style.height = firefly.style.width;
+
+                document.body.appendChild(firefly);
+            }
+        });
+    </script>
+</body>
+</html>
